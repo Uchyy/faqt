@@ -1,4 +1,5 @@
 import 'package:faqt/core/extensions/responsive_font.dart';
+import 'package:faqt/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class ImageCarousel extends StatefulWidget {
@@ -19,49 +20,43 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Stack(
+      alignment: Alignment.bottomCenter,   
       children: [
-        // CAROUSEL
-        SizedBox(
-          width: double.infinity,
-          child: AspectRatio(
-            aspectRatio: 4 / 5,
-            child: PageView.builder(
-              controller: _controller,
-              itemCount: widget.images.length,
-              onPageChanged: (i) => setState(() => _index = i),
-              itemBuilder: (_, i) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    widget.images[i],
-                    fit: BoxFit.contain,
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-
-        SizedBox(height: context.fontSize(FontSize.large)),
-
-        // DOTS
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(widget.images.length, (i) {
-            final active = i == _index;
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: active ? 14 : 8,
-              height: 8,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(12),
+        // FULLSCREEN CAROUSEL BACKGROUND
+        PageView.builder(
+          controller: _controller,
+          itemCount: widget.images.length,
+          onPageChanged: (i) => setState(() => _index = i),
+          itemBuilder: (_, i) {
+            return AspectRatio(
+              aspectRatio: 20 / 12,
+              child:  Image.asset(
+                widget.images[i],
+                fit: BoxFit.fill,
               ),
             );
-          }),
+          },
+        ),
+
+        Padding(
+          padding: const EdgeInsets.only(bottom: 40), 
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(widget.images.length, (i) {
+              final active = i == _index;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: active ? context.fontSize(FontSize.large) * 1.2 : context.fontSize(FontSize.large) * 0.8,
+                height: active ? context.fontSize(FontSize.large) * 1.2 : context.fontSize(FontSize.large) * 0.8,
+                decoration: BoxDecoration(
+                  color: active ? AppColors.brandGreen : AppColors.brandGreen.withAlpha(100),
+                  borderRadius: BorderRadius.circular(22),
+                ),
+              );
+            }),
+          ),
         ),
       ],
     );

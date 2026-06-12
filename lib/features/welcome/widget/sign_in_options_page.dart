@@ -19,7 +19,6 @@ class _SignInOptionsPageState extends State<SignInOptionsPage> {
   @override
   Widget build(BuildContext context) {
     final emailAddressController = TextEditingController();
-    final w = MediaQuery.sizeOf(context).width * 0.3;
 
     return SingleChildScrollView (
       child: Column(
@@ -28,20 +27,20 @@ class _SignInOptionsPageState extends State<SignInOptionsPage> {
         TextFormField(
             controller: emailAddressController,
             showCursor: true,
+            autofocus: true,
             keyboardType: TextInputType.emailAddress,
             textAlign: TextAlign.center,
             cursorColor: Theme.of(context).colorScheme.secondary,
             style: AppColors.smallMuted.copyWith(
               color: Theme.of(context).colorScheme.primary,
-              fontSize: context.fontSize(FontSize.normal),
+              fontSize: context.fontSize(FontSize.large),
               decoration: TextDecoration.none,
             ),
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: context.padding(PaddingSize.small).horizontal, vertical: context.padding(PaddingSize.small).vertical * 1.5),
               hintText: "Enter your email address",
               hintStyle: AppColors.cardDescription.copyWith(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: context.fontSize(FontSize.normal),
+                fontSize: context.fontSize(FontSize.large),
                 decoration: TextDecoration.none,
               ),
 
@@ -49,18 +48,34 @@ class _SignInOptionsPageState extends State<SignInOptionsPage> {
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: AppColors.brandGreen,
+                  width: 1.5,
+                ),
+              ),
+
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(
+                  color: AppColors.brandGreen.withAlpha(50),
                   width: 2,
                 ),
               ),
 
-              // FOCUSED BORDER
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(
-                  color: AppColors.pastelBlue,
-                  width: 3,
+              prefixIcon: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: context.padding(PaddingSize.small).vertical,
+                  horizontal: context.padding(PaddingSize.small).horizontal,
                 ),
+                child: Icon(
+                  Icons.email_outlined,
+                  size: context.fontSize(FontSize.large) * 1.8, // normal size
+                  color: AppColors.brandGreen,
+                ),
+              ),
+
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 0,
+                minHeight: 0,
               ),
             ),
           ),
@@ -85,50 +100,55 @@ class _SignInOptionsPageState extends State<SignInOptionsPage> {
                 widget.onMagicLinkSent( emailAddressController.text);
             },
           ),
-          const SizedBox(height: 45),
+          const SizedBox(height: 50),
 
-          Row (
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: w,
-                height: 1,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-
-              Text(
-                "OR",
-                style: AppColors.smallMuted.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: context.fontSize(FontSize.normal),
-                  decoration: TextDecoration.none,
+              Expanded(
+                child: Container(
+                  height: 1,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
 
-              Container(
-                width: w,
-                height: 1,
-                color: Theme.of(context).colorScheme.primary,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  "OR",
+                  style: AppColors.smallMuted.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: context.fontSize(FontSize.normal),
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ),
+
+              Expanded(
+                child: Container(
+                  height: 1,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 12,),
 
           GreyButton(
-            labelText: "Continue with Google",
-            icon: Icons.g_mobiledata,
-            onPressed: () {  
-            }
+            labelText: "Sign in with Google",
+            svgPath: "assets/svg/icons8-google.svg",
+            onPressed: () {},
           ),
-          const SizedBox(height: 12,),
+
+          const SizedBox(height: 12),
 
           GreyButton(
-            labelText: "Continue with Apple",
-            icon: Icons.iso_outlined,
-            onPressed: () {  
-            }
+            labelText: "Sign in with Apple",
+            svgPath: "assets/svg/icons8-apple.svg",
+            onPressed: () {},
           ),
+
         ],
       ),
     );

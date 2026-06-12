@@ -4,7 +4,6 @@ import 'package:faqt/core/routes/app_routes.dart';
 import 'package:faqt/core/utils/buttons/pastel_button.dart';
 import 'package:faqt/core/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class MagicLinkScreen extends StatefulWidget {
   final String email;
@@ -24,25 +23,17 @@ class _MagicLinkScreenState extends State<MagicLinkScreen> {
     final h = MediaQuery.sizeOf(context).height * 0.2;
     return SingleChildScrollView (
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
         
-          Container (
-            width: double.infinity,
-            height: h,
-            padding: context.padding( PaddingSize.medium),
-            child: Lottie.asset(
-              "anims/send_email_anims.json",
-              repeat: true,
-            ),
-          ),
-
           Text(
             "Check your email",
             textAlign: TextAlign.center,
             style: AppColors.cardHeader.copyWith(
-              fontSize: context.fontSize(FontSize.large),
-              color: AppColors.textPrimary,
+              fontSize: context.fontSize(FontSize.large) * 1.3,
+              color: Theme.of( context).colorScheme.primary,
               decoration: TextDecoration.none,
               fontWeight: FontWeight.w900,
             ),
@@ -52,13 +43,16 @@ class _MagicLinkScreenState extends State<MagicLinkScreen> {
           Text.rich (
             TextSpan(
               text: "Your sign-in link has been sent to ",
-              style: AppColors.smallMuted,
+              style: AppColors.smallMuted.copyWith(
+                fontSize: context.fontSize(FontSize.normal),
+              ),
               children: [
                 TextSpan(
                   text: widget.email,
                   style: AppColors.buttonText.copyWith(
                     fontWeight: FontWeight.w900,
                     decoration: TextDecoration.none,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const TextSpan(
@@ -71,7 +65,7 @@ class _MagicLinkScreenState extends State<MagicLinkScreen> {
               decoration: TextDecoration.none,
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 100),
 
           PastelButton(
             label: "Continue to Dashboard",
@@ -82,7 +76,6 @@ class _MagicLinkScreenState extends State<MagicLinkScreen> {
                Navigator.pushReplacementNamed(context, AppRoutes.dashboard);
             },
           ),
-          const SizedBox(height: 45),
 
         ],
       ),

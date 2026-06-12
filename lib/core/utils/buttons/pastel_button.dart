@@ -1,5 +1,3 @@
-import 'package:faqt/core/extensions/responsive_font.dart';
-import 'package:faqt/core/extensions/responsive_padding.dart';
 import 'package:faqt/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 

@@ -1,45 +1,66 @@
 import 'package:faqt/core/extensions/responsive_font.dart';
 import 'package:faqt/core/extensions/responsive_padding.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GreyButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String labelText;
-  final IconData icon;
+  final String svgPath; // ← changed
 
   const GreyButton({
     super.key,
     required this.onPressed,
     required this.labelText,
-    required this.icon,
+    required this.svgPath, // ← changed
   });
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 0.08;
+    //final height = MediaQuery.of(context).size.height * 0.08;
 
     return SizedBox(
       width: double.infinity,
-      height: height,
+      //height: height,
       child: ElevatedButton.icon(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           iconAlignment: IconAlignment.start,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
-          elevation: 1,
+          backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ?Theme.of(context).colorScheme.secondary
+            : Theme.of(context).colorScheme.surface.withAlpha(5),
+          foregroundColor: Theme.of(context).colorScheme.primary,
+          elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
-            side: BorderSide(color: Colors.grey.shade300),
+            side: Theme.of( context).colorScheme.outline.withOpacity(0.4) == Colors.transparent
+              ? BorderSide.none
+              : BorderSide(
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.4),
+                  width: 1,
+                ),
           ),
-          padding: context.padding(PaddingSize.large),
-          textStyle: TextStyle(
-            fontSize: context.fontSize(FontSize.large),
-            fontWeight: FontWeight.w800,
+          padding: EdgeInsets.symmetric(
+            vertical: context.padding(PaddingSize.small).vertical * 1.3,
+            horizontal: context.padding(PaddingSize.large).horizontal,
           ),
         ),
-        icon: Icon(icon, size: 24), 
-        label: Text (labelText), // You can replace this with the Google logo
+
+        // ⭐ SVG ICON HERE
+        icon: SvgPicture.asset(
+          svgPath,
+          height: context.fontSize(FontSize.large),
+          width: context.fontSize(FontSize.extraLarge),
+        ),
+
+        label: Text(
+          labelText,
+          style: TextStyle(
+            fontSize: context.fontSize(FontSize.normal),
+            fontWeight: FontWeight.w800,  
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
       ),
     );
   }

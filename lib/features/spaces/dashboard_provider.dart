@@ -1,17 +1,18 @@
+import 'package:faqt/model/workspaces.dart';
 import 'package:flutter/material.dart';
 
 class WorkspaceProvider extends ChangeNotifier {
-  String activeWorkspace = '';
+  Workspace? activeWorkspace;
 
-  String get current => activeWorkspace;
+  Workspace? get current => activeWorkspace;
 
-  void setActiveWorkspace(String space) {
+  void setActiveWorkspace(Workspace space) {
     activeWorkspace = space;
     notifyListeners();
   }
 
   void reset() {
-    activeWorkspace = '';
+    activeWorkspace = null;
     notifyListeners();
   }
 }

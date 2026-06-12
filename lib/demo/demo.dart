@@ -107,6 +107,7 @@ final demoSheets = <FaqtSheet>[
 // DEMO WORKSPACES
 // -----------------------------
 final demoWorkspaces = <Workspace>[
+  // 1. Personal flat-share workspace
   Workspace(
     id: "ws_1",
     name: "Flat Share",
@@ -114,17 +115,15 @@ final demoWorkspaces = <Workspace>[
     ownerId: "user_1",
     sheets: demoSheets.where((s) => s.workspaceId == "ws_1").toList(),
     members: demoUsers.where((u) => u.workspaces.contains("ws_1")).toList(),
-    sheetIds: demoSheets
-        .where((s) => s.workspaceId == "ws_1")
-        .map((s) => s.id)
-        .toList(),
-    memberIds: demoUsers
-        .where((u) => u.workspaces.contains("ws_1"))
-        .map((u) => u.id)
-        .toList(),
+    sheetIds: demoSheets.where((s) => s.workspaceId == "ws_1").map((s) => s.id).toList(),
+    memberIds: demoUsers.where((u) => u.workspaces.contains("ws_1")).map((u) => u.id).toList(),
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
+    visibility: WorkspaceVisibility.private,
+    type: WorkspaceType.personal,
   ),
+
+  // 2. Engineering team workspace (business)
   Workspace(
     id: "ws_2",
     name: "Engineering Team",
@@ -132,15 +131,92 @@ final demoWorkspaces = <Workspace>[
     ownerId: "user_3",
     sheets: demoSheets.where((s) => s.workspaceId == "ws_2").toList(),
     members: demoUsers.where((u) => u.workspaces.contains("ws_2")).toList(),
-    sheetIds: demoSheets
-        .where((s) => s.workspaceId == "ws_2")
-        .map((s) => s.id)
-        .toList(),
-    memberIds: demoUsers
-        .where((u) => u.workspaces.contains("ws_2"))
-        .map((u) => u.id)
-        .toList(),
+    sheetIds: demoSheets.where((s) => s.workspaceId == "ws_2").map((s) => s.id).toList(),
+    memberIds: demoUsers.where((u) => u.workspaces.contains("ws_2")).map((u) => u.id).toList(),
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
+    visibility: WorkspaceVisibility.private,
+    type: WorkspaceType.business,
+  ),
+
+  // 3. Public community workspace
+  Workspace(
+    id: "ws_3",
+    name: "Open Knowledge Hub",
+    description: "A public workspace for sharing general knowledge",
+    ownerId: "user_2",
+    sheets: demoSheets.where((s) => s.workspaceId == "ws_3").toList(),
+    members: demoUsers.where((u) => u.workspaces.contains("ws_3")).toList(),
+    sheetIds: demoSheets.where((s) => s.workspaceId == "ws_3").map((s) => s.id).toList(),
+    memberIds: demoUsers.where((u) => u.workspaces.contains("ws_3")).map((u) => u.id).toList(),
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    visibility: WorkspaceVisibility.public,
+    type: WorkspaceType.organization,
+  ),
+
+  // 4. Solo private workspace (no members except owner)
+  Workspace(
+    id: "ws_4",
+    name: "Personal Notes",
+    description: "Private workspace for personal notes and ideas",
+    ownerId: "user_4",
+    sheets: demoSheets.where((s) => s.workspaceId == "ws_4").toList(),
+    members: demoUsers.where((u) => u.id == "user_4").toList(),
+    sheetIds: demoSheets.where((s) => s.workspaceId == "ws_4").map((s) => s.id).toList(),
+    memberIds: ["user_4"],
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    visibility: WorkspaceVisibility.private,
+    type: WorkspaceType.personal,
+  ),
+
+  // 5. Large organization workspace (many members)
+  Workspace(
+    id: "ws_5",
+    name: "Marketing Department",
+    description: "Workspace for the entire marketing team",
+    ownerId: "user_5",
+    sheets: demoSheets.where((s) => s.workspaceId == "ws_5").toList(),
+    members: demoUsers, // all demo users
+    sheetIds: demoSheets.where((s) => s.workspaceId == "ws_5").map((s) => s.id).toList(),
+    memberIds: demoUsers.map((u) => u.id).toList(),
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    visibility: WorkspaceVisibility.private,
+    type: WorkspaceType.organization,
+  ),
+
+  // 6. Empty workspace (no sheets yet)
+  Workspace(
+    id: "ws_6",
+    name: "New Project Space",
+    description: "Fresh workspace with no sheets yet",
+    ownerId: "user_2",
+    sheets: const [],
+    members: demoUsers.where((u) => u.id == "user_2").toList(),
+    sheetIds: const [],
+    memberIds: ["user_2"],
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    visibility: WorkspaceVisibility.private,
+    type: WorkspaceType.business,
+  ),
+
+  // 7. Public workspace with mixed members
+  Workspace(
+    id: "ws_7",
+    name: "Community Recipes",
+    description: "Public workspace for sharing recipes",
+    ownerId: "user_1",
+    sheets: demoSheets.where((s) => s.workspaceId == "ws_7").toList(),
+    members: demoUsers.take(3).toList(),
+    sheetIds: demoSheets.where((s) => s.workspaceId == "ws_7").map((s) => s.id).toList(),
+    memberIds: demoUsers.take(3).map((u) => u.id).toList(),
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    visibility: WorkspaceVisibility.public,
+    type: WorkspaceType.personal,
   ),
 ];
+

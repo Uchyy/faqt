@@ -2,6 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faqt/model/faqt_sheet.dart';
 import 'package:faqt/model/user.dart';
 
+enum WorkspaceVisibility {
+  public,
+  private,
+}
+
+enum WorkspaceType {
+  personal,
+  business,
+  organization,
+}
+
+
 class Workspace {
   final String id;
   final String name;
@@ -18,6 +30,9 @@ class Workspace {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  final WorkspaceVisibility visibility;
+  final WorkspaceType type;
+
   Workspace({
     required this.id,
     required this.name,
@@ -29,6 +44,8 @@ class Workspace {
     this.memberIds = const [],
     required this.createdAt,
     required this.updatedAt,
+    required this.visibility,
+    required this.type,
   });
 
   // -----------------------------
@@ -44,6 +61,8 @@ class Workspace {
       'memberIds': memberIds,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
+      'visibility': visibility.toString(),
+      'type': type.toString(),
     };
   }
 
@@ -60,6 +79,14 @@ class Workspace {
       memberIds: List<String>.from(map['memberIds'] ?? []),
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      visibility: WorkspaceVisibility.values.firstWhere(
+        (v) => v.toString() == map['visibility'],
+        orElse: () => WorkspaceVisibility.private,
+      ),
+      type: WorkspaceType.values.firstWhere(
+        (v) => v.toString() == map['type'],
+        orElse: () => WorkspaceType.personal,
+      ),
     );
   }
 
@@ -86,6 +113,8 @@ class Workspace {
       memberIds: memberIds ?? this.memberIds,
       createdAt: createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      visibility: visibility,
+      type: type,
     );
   }
 }

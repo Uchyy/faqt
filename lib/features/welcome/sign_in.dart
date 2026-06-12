@@ -5,6 +5,7 @@ import 'package:faqt/core/widgets/faqt_icon.dart';
 import 'package:faqt/features/welcome/widget/magic_link.dart';
 import 'package:faqt/features/welcome/widget/sign_in_options_page.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class SigInScreen extends StatefulWidget {
   const SigInScreen({super.key});
@@ -19,6 +20,8 @@ class _SigInScreenState extends State<SigInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    final h = screenHeight * 0.2;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
@@ -30,61 +33,88 @@ class _SigInScreenState extends State<SigInScreen> {
                 padding: context.padding(PaddingSize.medium),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 40),
+                  children: [                   
+                    const FaqtIcon(),
+                    const SizedBox(width: 12),
 
-                    // Header
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Row (
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const FaqtIcon(),
-                        const SizedBox(width: 12),
                         Text(
-                          "Welcome to Faqt",
-                          style: AppColors.title.copyWith(
+                          "Welcome to ",
+                          style: AppColors.header.copyWith(
                             color: Theme.of(context).colorScheme.primary,
-                            fontSize: context.fontSize(FontSize.extraLarge),
-                          ),
+                            fontSize: context.fontSize(FontSize.extraLarge ) * 1.2,
+                          ),    
                         ),
+                        AppColors.appTitle(context),
                       ],
                     ),
-
                     const SizedBox(height: 8),
 
                     // Subheader with styling
-                    Container(
-                      padding: context.padding(PaddingSize.small),
-                      decoration: BoxDecoration(
-                        color: AppColors.pastelMint.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(12),
+                    Text(
+                      "Stay organised. Stay informed.",
+                      style: AppColors.smallMuted.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: context.fontSize(FontSize.normal),
                       ),
-                      child: Text(
-                        "Stay organised. Stay informed. Stay in Faqt.",
-                        style: AppColors.smallMuted.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: context.fontSize(FontSize.large),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                      textAlign: TextAlign.center,
                     ),
 
-                    const SizedBox(height: 20),
-
-                    // Illustration
-                    Image.asset(
-                      "assets/images/welcome-1.png",
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      fit: BoxFit.contain,
+                    Text(
+                      "All with Faqts.",
+                      style: AppColors.smallMuted.copyWith(
+                        color: AppColors.brandGreen,
+                        fontSize: context.fontSize(FontSize.normal),
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 40),
-
+                    const SizedBox(height: 30),
+                    
+                    showMagicLink 
+                    ? Container (
+                      width: double.infinity,
+                      height: h,
+                      padding: context.padding( PaddingSize.medium),
+                      child: Lottie.asset(
+                        "anims/send_email_anims.json",
+                        repeat: true,
+                      ),
+                    )
+                    : AspectRatio(
+                      aspectRatio: 20 / 9,
+                      child: Image.asset(
+                        "assets/images/welcome_2.png",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                 
                     // Card container for form
                     Container(
-                      padding: const EdgeInsets.all(20),
+                      constraints: BoxConstraints(
+                        minHeight: screenHeight * 0.4
+                      ),
+                      margin: EdgeInsets.only(
+                        left: context.padding(PaddingSize.small).horizontal * 0.3,
+                        right: context.padding(PaddingSize.small).horizontal * 0.3,
+                        top: 0,
+                      ),
+                      padding: EdgeInsets.only(
+                        top: context.padding(PaddingSize.medium).vertical ,
+                        bottom: context.padding(PaddingSize.medium).vertical,
+                        left: context.padding(PaddingSize.medium).horizontal * 0.5,
+                        right: context.padding(PaddingSize.medium).horizontal * 0.8,
+                      ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(16),
+                        color: Theme.of(context).colorScheme.primaryContainer.withAlpha(30),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.primary.withAlpha(100),
+                          width: 1.5,
+                        ),
                       ),
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
@@ -100,10 +130,11 @@ class _SigInScreenState extends State<SigInScreen> {
                               ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
 
-                    // Footer
-                    showMagicLink
+                    Align (
+                      alignment: Alignment.bottomCenter,
+                      child : showMagicLink
                         ? TextButton(
                             onPressed: () => setState(() => showMagicLink = false),
                             child: Text(
@@ -112,6 +143,8 @@ class _SigInScreenState extends State<SigInScreen> {
                                 color: Theme.of(context).colorScheme.primary,
                                 fontSize: context.fontSize(FontSize.small),
                                 decoration: TextDecoration.underline,
+                                decorationColor: Theme.of(context).colorScheme.primary,
+                                decorationThickness: 1.5,
                               ),
                             ),
                           )
@@ -156,9 +189,8 @@ class _SigInScreenState extends State<SigInScreen> {
                               ),
                             textAlign: TextAlign.center,
                           )
-                          ),
-
-                    const SizedBox(height: 40),
+                        ),
+                    ),
                   ],
                 ),
               ),

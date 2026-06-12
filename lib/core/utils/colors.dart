@@ -1,3 +1,4 @@
+import 'package:faqt/core/extensions/responsive_font.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -26,7 +27,7 @@ class AppColors {
   // ======================
   // BRAND ELEMENTS
   // ======================
-  static const brandGreen = Color(0xFF4CAF50); // F in "Faqt"
+  static const brandGreen = Color(0xFF60A9AE);
   static const brandBlack = Color(0xFF000000);
   static const brandWhite = Color(0xFFFFFFFF);
 
@@ -59,6 +60,12 @@ class AppColors {
   // ======================
   // TEXT STYLES (Simplified)
   // ======================
+  static TextStyle header = GoogleFonts.playfairDisplay(
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1.15,
+  );
+  
   static TextStyle title = GoogleFonts.comfortaa(
     fontSize: 28,
     fontWeight: FontWeight.w700,
@@ -66,23 +73,19 @@ class AppColors {
   );
 
   static TextStyle cardHeader = GoogleFonts.inter(
-    fontSize: 18,
     fontWeight: FontWeight.w600,
   );
 
   static TextStyle cardDescription = GoogleFonts.inter(
-    fontSize: 15,
     height: 1.4,
     fontWeight: FontWeight.w400,
   );
 
   static TextStyle smallMuted = GoogleFonts.comfortaa(
-    fontSize: 13,
     color: textSecondary,
   );
 
   static TextStyle buttonText = GoogleFonts.kalam(
-    fontSize: 15,
     color: textSecondary,
   );
 
@@ -101,27 +104,13 @@ class AppColors {
   // ======================
   // BRAND TITLE WIDGET
   // ======================
-  static Widget appTitle() {
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: 'F',
-            style: GoogleFonts.inter(
-              color: brandGreen,
-              fontSize: 34,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          TextSpan(
-            text: 'aqt',
-            style: GoogleFonts.inter(
-              color: brandBlack,
-              fontSize: 34,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ],
+  static Widget appTitle(BuildContext context) {
+    return Text(
+      "Faqt",
+      style: GoogleFonts.playfairDisplay(
+        fontSize: context.fontSize(FontSize.extraLarge) * 1.2,
+        fontWeight: FontWeight.w800,
+        color: brandGreen,
       ),
     );
   }

@@ -41,6 +41,8 @@ dependencies:
   lottie: ^3.3.3
   cloud_firestore: ^6.4.1
   firebase_ui_firestore: ^2.0.1
+  flutter_svg: ^2.3.0
+  dropdown_button2: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -73,7 +75,10 @@ flutter:
     - assets/images/onboarding-bg.jpg
     - assets/images/bg_lovable.png
     - assets/anims/send_email_anims.json
-    - assets/images/welcome-1.png
+    - assets/images/welcome_2.png
+
+    - assets/svg/icons8-apple.svg
+    - assets/svg/icons8-google.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
