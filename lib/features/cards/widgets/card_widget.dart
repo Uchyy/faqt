@@ -14,20 +14,13 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width =  MediaQuery.sizeOf(context).width;
-    final height =  MediaQuery.sizeOf(context).height;
-
-
     return Container(
-      constraints: BoxConstraints(
-        minWidth: width * 0.45,
-        minHeight: height * 0.3
-      ),
       decoration: BoxDecoration(
         color: faqt.category.color,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
@@ -41,7 +34,7 @@ class CardWidget extends StatelessWidget {
                 topRight: Radius.circular(18),
               ),
             ),
-            padding: context.padding(PaddingSize.small),
+            padding: context.padding(PaddingSize.small) * 0.7,
             child: Text(
               faqt.title,
               style: AppColors.cardHeader.copyWith(
@@ -56,7 +49,7 @@ class CardWidget extends StatelessWidget {
           ),
 
           /// DESCRIPTION
-          const SizedBox(height: 25),
+          const SizedBox(height: 10),
           Text(
             faqt.description ?? "This space has no description",
             style: AppColors.cardDescription.copyWith(
@@ -65,12 +58,10 @@ class CardWidget extends StatelessWidget {
             ),
             softWrap: true,
             textAlign: TextAlign.center,
-            maxLines: 5,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-
           const SizedBox(height: 10),
-          const Spacer(),
 
           //if (showDivider) ... [ _divider()] ,
           /// ICONS ROW
@@ -84,7 +75,7 @@ class CardWidget extends StatelessWidget {
 
                   },
                   icon: _iconizer(Icon(Icons.link_outlined), context), 
-                  iconSize: context.fontSize(FontSize.large),
+                  iconSize: context.fontSize(FontSize.normal),
                   color: Theme.of(context).colorScheme.primary
                 ),
 

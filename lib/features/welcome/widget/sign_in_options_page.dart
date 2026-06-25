@@ -15,10 +15,10 @@ class SignInOptionsPage extends StatefulWidget {
 }
 
 class _SignInOptionsPageState extends State<SignInOptionsPage> {
+  final emailAddressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final emailAddressController = TextEditingController();
 
     return SingleChildScrollView (
       child: Column(

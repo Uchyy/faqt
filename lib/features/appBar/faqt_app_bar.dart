@@ -25,7 +25,7 @@ class FaqtAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-    MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.first).size.height * 0.15,
+    MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.first).size.height * 0.18,
   ); // fallback
 }
 
@@ -40,7 +40,7 @@ class _FaqtAppBarState extends State<FaqtAppBar> {
     final spaces = hubProvider.currentSpaces;  
     final activeSpaceId = hubProvider.activeSpaceId;     
 
-    final height = MediaQuery.sizeOf(context).height * 0.15;
+    final height = MediaQuery.sizeOf(context).height * 0.18;
     final dropdownWidth = MediaQuery.sizeOf(context).width * 0.5;
 
     return SafeArea(
