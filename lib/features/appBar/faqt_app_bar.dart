@@ -1,47 +1,46 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:faqt/core/extensions/responsive_font.dart';
 import 'package:faqt/core/extensions/responsive_padding.dart';
 import 'package:faqt/core/utils/colors.dart';
-import 'package:faqt/core/widgets/faqt_icon.dart';
 import 'package:faqt/demo/demo.dart';
-import 'package:faqt/features/spaces/dashboard_provider.dart';
-import 'package:faqt/features/appBar/widgets/dropdown_item.dart';
+import 'package:faqt/features/appBar/widgets/dropdown.dart';
+import 'package:faqt/features/dashboard/dashboard_provider.dart';
 import 'package:faqt/model/user.dart';
-import 'package:faqt/model/workspaces.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FaqtAppBar extends StatefulWidget implements PreferredSizeWidget {
   final FaqtUser user;
+  final GlobalKey<ScaffoldState>? scaffoldKey; 
+  //final VoidCallback onMenuPressed;
 
   const FaqtAppBar({
     super.key,
     required this.user,
+    required this.scaffoldKey, 
+    //required  this.onMenuPressed,
   });
 
   @override
   State<FaqtAppBar> createState() => _FaqtAppBarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(80); // fallback
+  Size get preferredSize => Size.fromHeight(
+    MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.first).size.height * 0.15,
+  ); // fallback
 }
 
 class _FaqtAppBarState extends State<FaqtAppBar> {
-  double getResponsiveHeight(BuildContext context) {
-    final view = View.of(context);
-    final width = view.physicalSize.width / view.devicePixelRatio;
-
-    if (width < 400) return 75;   // small phones
-    if (width < 600) return 90;   // normal phones
-    return 120;                    // tablets / large screens
-  }
-
   @override
   Widget build(BuildContext context) {
-    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
-    final selectedWorkspace = workspaceProvider.current == null ? demoWorkspaces.first : workspaceProvider.current!;
+    final hubProvider = context.watch<HubProvider>();
+    final user = demoUsers.elementAt(0);
 
-    final height = getResponsiveHeight(context);
+    final hub = hubProvider.currentHub;        
+    final hubs = hubProvider.hubs;    
+    final spaces = hubProvider.currentSpaces;  
+    final activeSpaceId = hubProvider.activeSpaceId;     
+
+    final height = MediaQuery.sizeOf(context).height * 0.15;
     final dropdownWidth = MediaQuery.sizeOf(context).width * 0.5;
 
     return SafeArea(
@@ -49,199 +48,132 @@ class _FaqtAppBarState extends State<FaqtAppBar> {
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20)
+            bottomRight: Radius.circular(20),
           ),
           border: Border(
             bottom: BorderSide(
               color: Theme.of(context).colorScheme.secondary,
-              width: 1.5
-            )
-          )
+              width: 1.5,
+            ),
+          ),
         ),
         height: height,
-        
         padding: EdgeInsets.symmetric(
-          horizontal: context.padding(PaddingSize.small).horizontal,
-          vertical: height * 0.18, 
+          horizontal: context.padding(PaddingSize.small).horizontal * 0.5,
+          vertical: context.padding(PaddingSize.small).vertical * 0.5,
         ),
-        
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //const FaqtIcon(),
-            //const SizedBox(width: 12),
 
-            SizedBox(
-              width: dropdownWidth,
-              child: _FaqtDropdown(
-                selected: selectedWorkspace,
-                user: widget.user,
-                onChanged: workspaceProvider.setActiveWorkspace,
-              ),
+            // Row of dropdown and settings button
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: dropdownWidth,
+                  child: FaqtDropdown(
+                    user: user,
+                    selected: hub,   
+                    hubs: hubs,            
+                    onChanged: hubProvider.setActiveHub,
+                  ),
+                ),
+                const Spacer(),
+
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.settings,
+                    size: context.fontSize(FontSize.extraLarge) * 1.2,
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                ),
+              ],
             ),
-
             const Spacer(),
 
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.settings,
-                size: context.fontSize(FontSize.extraLarge) * 1.2,
-                color: Theme.of(context).colorScheme.outline,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding:  EdgeInsets.only(
+                top: context.padding(PaddingSize.small).top,
+                bottom: context.padding(PaddingSize.small).bottom,
+                right: context.padding(PaddingSize.small).right
+              ),
+              child: Row(
+                children: [
+                  /// ALL FAQTS CHIP
+                  _buildGlassChip(
+                    "All",
+                    isSelected: activeSpaceId == null,
+                    onTap: () => hubProvider.setActiveSpace(null),
+                  ),
+
+                  /// SPACE CHIPS
+                  ...spaces.map((space) {
+                    return _buildGlassChip(
+                      space.name,
+                      isSelected: activeSpaceId == space.id,
+                      onTap: () => hubProvider.setActiveSpace(space.id),
+                    );
+                  }),
+                ],
               ),
             ),
           ],
-        ),
+        )
       ),
     );
   }
-}
 
-class _FaqtDropdown extends StatelessWidget {
-  final Workspace? selected;
-  final FaqtUser user;
-  final Function(Workspace) onChanged;
+   Widget _buildGlassChip( String label, { required bool isSelected, required VoidCallback onTap, }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-  const _FaqtDropdown({
-    required this.selected,
-    required this.user,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final userWorkspaces = demoWorkspaces
-        .where((w) => w.memberIds.contains(user.id))
-        .toList();
-
-    final currentValue = userWorkspaces.contains(selected) ? selected : userWorkspaces.first;
-    final h = MediaQuery.of(context).size.height;
-
-    return DropdownButtonHideUnderline(
-      child: DropdownButton2<Workspace>(
-        valueListenable: ValueNotifier(currentValue),
-        isExpanded: true,
-        buttonStyleData: ButtonStyleData(
-          height: MediaQuery.sizeOf(context).width * 0.2
-        ),
-        customButton: Container(
-          padding: context.padding(PaddingSize.small),
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            color: isSelected
+                ? AppColors.brandGreen.withAlpha(80)       
+                : (isDark  ? Colors.white.withOpacity(0.15) : Colors.black.withOpacity(0.06)),       // light mode glass
+
+            borderRadius: BorderRadius.circular(24),
+
             border: Border.all(
-              color: Theme.of(context).colorScheme.secondary,
+              color: isSelected
+                  ? (isDark
+                      ? Colors.white.withOpacity(0.9)
+                      : Colors.black.withOpacity(0.4))
+                  : (isDark
+                      ? Colors.white.withOpacity(0.3)
+                      : Colors.black.withOpacity(0.15)),
             ),
-            color: Theme.of(context) .colorScheme.surfaceContainerHighest.withOpacity(.18),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  currentValue?.name ?? "Select Space",
-                  overflow: TextOverflow.ellipsis,
-                  style: AppColors.cardHeader.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: context.fontSize(FontSize.normal)
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.expand_more,
-                size: context.fontSize(FontSize.normal),
+
+            boxShadow: [
+              BoxShadow(
+                color: isDark
+                    ? Colors.black.withOpacity(0.25)
+                    : Colors.black.withOpacity(0.08),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
-        ),
 
-        dropdownStyleData: DropdownStyleData(
-          elevation: 2,
-          padding: context.padding(PaddingSize.small) * 0.4,
-          maxHeight: MediaQuery.sizeOf(context).height ,
-          width:  MediaQuery.sizeOf(context).width * 0.6 ,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            border: Border.symmetric(
-              vertical: BorderSide(
-                color: AppColors.accentGrey,
-                style: BorderStyle.solid
-              )
-            )
-            
-          ),
-          offset: const Offset(0, 0),
-        ),
-
-        menuItemStyleData: const MenuItemStyleData(
-          padding: EdgeInsets.zero,
-        ),
-
-        items: [
-          ...userWorkspaces.map(
-            (workspace) => DropdownItem(
-              height:  h * 0.065,
-              value: workspace,
-              child: WorkspaceDropdownItem(
-                workspace: workspace,
-                selected: workspace.id == currentValue?.id,
-              ),
+          child: Text(
+            label,
+            style: AppColors.cardHeader.copyWith(
+              color: isDark ? Colors.white : Colors.black87,
+              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w400,
             ),
           ),
-
-          // ⭐ "Create New Space" item — no padding, no height
-          DropdownItem(
-            value: null,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(  context);
-                debugPrint( "Create Space", );
-              },
-
-              child: Container(
-                padding: context.padding(PaddingSize.small),
-                decoration: BoxDecoration( 
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color.from(alpha: 1, red: 0.376, green: 0.663, blue: 0.682),
-                      const Color.from(alpha: 0.7, red: 0.235, green: 0.616, blue: 0.424),
-                    ],
-                  ),
-                ),
-
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.add_card,
-                      size: context.fontSize(FontSize.extraLarge) ,
-                      color: AppColors.brandWhite,
-                    ),
-
-                    const SizedBox(width: 14),
-
-                    Expanded(
-                      child: Text(
-                        "Create New Space",
-                        style: AppColors.buttonText.copyWith(
-                          color:  Colors.white,
-                          fontWeight: FontWeight .w800,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          
-        ],
-
-        onChanged: (value) {
-          if (value != null) {
-            onChanged(value);
-          }
-        },
+        ),
       ),
     );
   }

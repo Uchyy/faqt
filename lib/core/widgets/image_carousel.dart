@@ -23,7 +23,6 @@ class _ImageCarouselState extends State<ImageCarousel> {
     return Stack(
       alignment: Alignment.bottomCenter,   
       children: [
-        // FULLSCREEN CAROUSEL BACKGROUND
         PageView.builder(
           controller: _controller,
           itemCount: widget.images.length,

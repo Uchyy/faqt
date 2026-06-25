@@ -72,7 +72,7 @@ class AppColors {
     letterSpacing: -0.5,
   );
 
-  static TextStyle cardHeader = GoogleFonts.inter(
+  static TextStyle cardHeader = GoogleFonts.notoSerif(
     fontWeight: FontWeight.w600,
   );
 
@@ -110,7 +110,7 @@ class AppColors {
       style: GoogleFonts.playfairDisplay(
         fontSize: context.fontSize(FontSize.extraLarge) * 1.2,
         fontWeight: FontWeight.w800,
-        color: brandGreen,
+        color: const Color.fromRGBO(96, 169, 174, 1),
       ),
     );
   }

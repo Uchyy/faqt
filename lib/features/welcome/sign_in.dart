@@ -55,7 +55,7 @@ class _SigInScreenState extends State<SigInScreen> {
 
                     // Subheader with styling
                     Text(
-                      "Stay organised. Stay informed.",
+                      "Keep the answers. Skip the asking.",
                       style: AppColors.smallMuted.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: context.fontSize(FontSize.normal),

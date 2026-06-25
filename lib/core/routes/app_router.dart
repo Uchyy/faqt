@@ -1,6 +1,6 @@
 import 'package:faqt/core/routes/app_routes.dart';
 import 'package:faqt/features/onboarding/onboarding.dart';
-import 'package:faqt/features/spaces/dashboard.dart';
+import 'package:faqt/features/dashboard/dashboard.dart';
 import 'package:faqt/features/welcome/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'transitions.dart';

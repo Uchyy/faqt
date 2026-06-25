@@ -5,7 +5,14 @@ class FaqtUser {
   final String email;
   final String? name;
   final String? photoUrl;
-  final List<String> workspaces;
+
+  // Hubs the user belongs to
+  final List<String> hubs;
+
+  // Optional UX helpers
+  final String? lastActiveHubId;
+  final String? lastActiveSpaceId;
+
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -14,18 +21,21 @@ class FaqtUser {
     required this.email,
     this.name,
     this.photoUrl,
-    this.workspaces = const [],
+    this.hubs = const [],
+    this.lastActiveHubId,
+    this.lastActiveSpaceId,
     required this.createdAt,
     required this.updatedAt,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'email': email,
       'name': name,
       'photoUrl': photoUrl,
-      'workspaces': workspaces,
+      'hubs': hubs,
+      'lastActiveHubId': lastActiveHubId,
+      'lastActiveSpaceId': lastActiveSpaceId,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
     };
@@ -37,7 +47,9 @@ class FaqtUser {
       email: map['email'] ?? '',
       name: map['name'],
       photoUrl: map['photoUrl'],
-      workspaces: List<String>.from(map['workspaces'] ?? []),
+      hubs: List<String>.from(map['hubs'] ?? []),
+      lastActiveHubId: map['lastActiveHubId'],
+      lastActiveSpaceId: map['lastActiveSpaceId'],
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );

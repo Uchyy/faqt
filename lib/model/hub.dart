@@ -1,46 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faqt/model/faqt_sheet.dart';
+import 'package:faqt/model/space.dart';
 import 'package:faqt/model/user.dart';
 
-enum WorkspaceVisibility {
+enum HubVisibility {
   public,
   private,
 }
 
-enum WorkspaceType {
+enum HubType {
   personal,
   business,
   organization,
 }
 
-
-class Workspace {
+class Hub {
   final String id;
   final String name;
   final String? description;
   final String ownerId;
 
-  // These are NOT stored directly in Firestore
-  final List<FaqtSheet> sheets;
+  // NOT stored directly in Firestore
+  final List<Space> spaces;
   final List<FaqtUser> members;
 
-  final List<String> sheetIds;   // stored in Firestore
-  final List<String> memberIds;  // stored in Firestore
+  // Stored in Firestore
+  final List<String> spaceIds;
+  final List<String> memberIds;
 
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  final WorkspaceVisibility visibility;
-  final WorkspaceType type;
+  final HubVisibility visibility;
+  final HubType type;
 
-  Workspace({
+  Hub({
     required this.id,
     required this.name,
     this.description,
     required this.ownerId,
-    this.sheets = const [],
+    this.spaces = const [],
     this.members = const [],
-    this.sheetIds = const [],
+    this.spaceIds = const [],
     this.memberIds = const [],
     required this.createdAt,
     required this.updatedAt,
@@ -48,16 +48,13 @@ class Workspace {
     required this.type,
   });
 
-  // -----------------------------
-  // Convert model → Firestore Map
-  // -----------------------------
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
       'description': description,
       'ownerId': ownerId,
-      'sheetIds': sheetIds,
+      'spaceIds': spaceIds,
       'memberIds': memberIds,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
@@ -66,50 +63,44 @@ class Workspace {
     };
   }
 
-  // -----------------------------
-  // Convert Firestore Map → Model
-  // -----------------------------
-  factory Workspace.fromMap(Map<String, dynamic> map, String documentId) {
-    return Workspace(
+  factory Hub.fromMap(Map<String, dynamic> map, String documentId) {
+    return Hub(
       id: documentId,
       name: map['name'] ?? '',
       description: map['description'],
       ownerId: map['ownerId'] ?? '',
-      sheetIds: List<String>.from(map['sheetIds'] ?? []),
+      spaceIds: List<String>.from(map['spaceIds'] ?? []),
       memberIds: List<String>.from(map['memberIds'] ?? []),
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      visibility: WorkspaceVisibility.values.firstWhere(
+      visibility: HubVisibility.values.firstWhere(
         (v) => v.toString() == map['visibility'],
-        orElse: () => WorkspaceVisibility.private,
+        orElse: () => HubVisibility.private,
       ),
-      type: WorkspaceType.values.firstWhere(
+      type: HubType.values.firstWhere(
         (v) => v.toString() == map['type'],
-        orElse: () => WorkspaceType.personal,
+        orElse: () => HubType.personal,
       ),
     );
   }
 
-  // -----------------------------
-  // Helper: copyWith
-  // -----------------------------
-  Workspace copyWith({
+  Hub copyWith({
     String? name,
     String? description,
-    List<FaqtSheet>? sheets,
+    List<Space>? spaces,
     List<FaqtUser>? members,
-    List<String>? sheetIds,
+    List<String>? spaceIds,
     List<String>? memberIds,
     DateTime? updatedAt,
   }) {
-    return Workspace(
+    return Hub(
       id: id,
       name: name ?? this.name,
       description: description ?? this.description,
       ownerId: ownerId,
-      sheets: sheets ?? this.sheets,
+      spaces: spaces ?? this.spaces,
       members: members ?? this.members,
-      sheetIds: sheetIds ?? this.sheetIds,
+      spaceIds: spaceIds ?? this.spaceIds,
       memberIds: memberIds ?? this.memberIds,
       createdAt: createdAt,
       updatedAt: updatedAt ?? this.updatedAt,

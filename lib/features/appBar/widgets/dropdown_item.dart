@@ -1,11 +1,11 @@
 import 'package:faqt/core/extensions/responsive_font.dart';
 import 'package:faqt/core/extensions/responsive_padding.dart';
 import 'package:faqt/core/utils/colors.dart';
-import 'package:faqt/model/workspaces.dart';
+import 'package:faqt/model/hub.dart';
 import 'package:flutter/material.dart';
 
 class WorkspaceDropdownItem extends StatelessWidget {
-  final Workspace workspace;
+  final Hub workspace;
   final bool selected;
 
   const WorkspaceDropdownItem({super.key, 
@@ -32,9 +32,9 @@ class WorkspaceDropdownItem extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            workspace.type == WorkspaceType.personal
+            workspace.type == HubType.personal
                 ? Icons.person_outline
-                : workspace.type == WorkspaceType.business
+                : workspace.type == HubType.business
                     ? Icons.business_outlined
                     : Icons.public,
             size: context.fontSize(FontSize.normal),

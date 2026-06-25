@@ -1,8 +1,8 @@
-import 'package:faqt/model/faqt_sheet.dart';
+import 'package:faqt/model/faqt.dart';
 import 'package:flutter/material.dart';
 
 class CreateNewSheet extends StatefulWidget {
-  final List<FaqtSheet> sheets;
+  final List<Faqt> sheets;
 
   const CreateNewSheet({
     super.key,

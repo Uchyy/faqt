@@ -1,11 +1,14 @@
 import 'package:faqt/demo/demo.dart';
-import 'package:faqt/model/faqt_sheet.dart';
+import 'package:faqt/model/faqt.dart';
+import 'package:faqt/model/space.dart';
 import 'package:faqt/model/user.dart';
-import 'package:faqt/model/workspaces.dart';
+import 'package:faqt/model/hub.dart';
 
 final demoUserRepo = DemoUserRepository();
-final demoSheetRepo = DemoSheetRepository();
-final demoWorkspaceRepo = DemoWorkspaceRepository();
+final demoFaqtRepo = DemoFaqtRepository();
+final demoSpaceRepo = DemoSpaceRepository();
+final demoHubRepo = DemoHubRepository();
+
 
 class DemoUserRepository {
   Future<FaqtUser?> getUser(String id) async {
@@ -20,37 +23,61 @@ class DemoUserRepository {
   }
 }
 
-class DemoSheetRepository {
-  Future<FaqtSheet?> getSheet(String id) async {
-    return demoSheets.firstWhere(
-      (s) => s.id == id,
-      orElse: () => demoSheets.first,
+
+class DemoFaqtRepository {
+  Future<Faqt?> getFaqt(String id) async {
+    return demoFaqts.firstWhere(
+      (f) => f.id == id,
+      orElse: () => demoFaqts.first,
     );
   }
 
-  Future<List<FaqtSheet>> getSheetsForWorkspace(String workspaceId) async {
-    return demoSheets.where((s) => s.workspaceId == workspaceId).toList();
+  Future<List<Faqt>> getFaqtsForHub(String hubId) async {
+    return demoFaqts.where((f) => f.hubId == hubId).toList();
   }
 
-  Future<List<FaqtSheet>> getAllSheets() async {
-    return demoSheets;
+  Future<List<Faqt>> getFaqtsForSpace(String spaceId) async {
+    return demoFaqts.where((f) => f.spaceIds.contains(spaceId)).toList();
+  }
+
+  Future<List<Faqt>> getAllFaqts() async {
+    return demoFaqts;
   }
 }
 
-class DemoWorkspaceRepository {
-  Future<Workspace?> getWorkspace(String id) async {
-    return demoWorkspaces.firstWhere(
-      (w) => w.id == id,
-      orElse: () => demoWorkspaces.first,
+
+class DemoSpaceRepository {
+  Future<Space?> getSpace(String id) async {
+    return demoSpaces.firstWhere(
+      (s) => s.id == id,
+      orElse: () => demoSpaces.first,
     );
   }
 
-  Future<List<Workspace>> getAllWorkspaces() async {
-    return demoWorkspaces;
+  Future<List<Space>> getSpacesForHub(String hubId) async {
+    return demoSpaces.where((s) => s.hubId == hubId).toList();
   }
 
-  Future<List<Workspace>> getWorkspacesForUser(String userId) async {
-    return demoWorkspaces
+  Future<List<Space>> getAllSpaces() async {
+    return demoSpaces;
+  }
+}
+
+
+class DemoHubRepository {
+  Future<Hub?> getHub(String id) async {
+    return demoHubs.firstWhere(
+      (w) => w.id == id,
+      orElse: () => demoHubs.first,
+    );
+  }
+
+  Future<List<Hub>> getAllHubs() async {
+    return demoHubs;
+  }
+
+  Future<List<Hub>> getHubsForUser(String userId) async {
+    return demoHubs
         .where((w) => w.memberIds.contains(userId))
         .toList();
   }

@@ -43,6 +43,8 @@ dependencies:
   firebase_ui_firestore: ^2.0.1
   flutter_svg: ^2.3.0
   dropdown_button2: ^3.1.0
+  sidebarx: ^0.17.2
+  collapsible_sidebar: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -68,9 +70,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/1.png
-    - assets/images/2.png
-    - assets/images/3.png
+    - assets/images/Faqt1.png
+    - assets/images/Faqt2.png
+    - assets/images/Faqt3.png
+
     - assets/images/faqt-icon.png
     - assets/images/onboarding-bg.jpg
     - assets/images/bg_lovable.png
