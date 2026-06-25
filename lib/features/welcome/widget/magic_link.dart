@@ -20,7 +20,6 @@ class MagicLinkScreen extends StatefulWidget {
 class _MagicLinkScreenState extends State<MagicLinkScreen> {
   @override
   Widget build(BuildContext context) {
-    final h = MediaQuery.sizeOf(context).height * 0.2;
     return SingleChildScrollView (
       child: Column(
         mainAxisSize: MainAxisSize.max,

@@ -14,7 +14,6 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showDivider = faqt.links.isNotEmpty || faqt.images.isNotEmpty || faqt.phoneNumbers.isNotEmpty;
     final width =  MediaQuery.sizeOf(context).width;
     final height =  MediaQuery.sizeOf(context).height;
 
@@ -119,14 +118,6 @@ class CardWidget extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _divider() {
-    return Container(
-      height: 1,
-      width: double.infinity,
-      color: Colors.black12,
     );
   }
 

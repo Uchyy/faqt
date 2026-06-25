@@ -1,6 +1,3 @@
-import 'package:faqt/core/extensions/responsive_font.dart';
-import 'package:faqt/core/extensions/responsive_padding.dart';
-import 'package:faqt/core/utils/colors.dart';
 import 'package:faqt/demo/demo.dart';
 import 'package:faqt/features/appBar/faqt_app_bar.dart';
 import 'package:faqt/features/dashboard/dashboard_provider.dart';
@@ -34,7 +31,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final hubProvider = context.watch<HubProvider>();
 
     final hub = hubProvider.currentHub;
-    final spaces = hubProvider.currentSpaces;
     final activeSpaceId = hubProvider.activeSpaceId;
 
     if (hub == null) {
